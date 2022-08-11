@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import starRoutes from "../router/star.routes";
+import driverRoutes from "../router/driver.routes";
+import carRoutes from "../router/car.routes";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,15 +41,17 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import("../views/DriverService.vue"),
+      component: () => import("../views/Driver/Driver.vue"),
+      children: driverRoutes,
     },
     {
-      path: "/car-service",
-      name: "car-service",
+      path: "/car",
+      name: "car",
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import("../views/CarService.vue"),
+      component: () => import("../views/Car/Index.vue"),
+      children: carRoutes,
     },
     {
       path: "/premium-member",

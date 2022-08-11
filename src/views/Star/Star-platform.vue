@@ -2,7 +2,7 @@
   <div>
     <StarHero
       :heroContentType="heroContentType"
-      :currentContent="currentContent"
+      :currentTab="currentTab"
     ></StarHero>
     <div class="mb-[15vh] px-[20%] flex flex-col">
       <span class="mb-8 text-3xl">주요 고객사</span>
@@ -64,10 +64,10 @@
     },
     setup() {
       const heroContentType = ref(HeroContentType.STAR);
-      const currentContent = ref(StarContent.PLATFORM);
+      const currentTab = ref(StarContent.PLATFORM);
 
       return {
-        currentContent,
+        currentTab,
         heroContentType,
       };
     },

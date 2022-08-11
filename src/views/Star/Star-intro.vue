@@ -2,7 +2,7 @@
   <div class="my-[12vh] flex flex-col justify-center items-center">
     <StarHero
       :heroContentType="heroContentType"
-      :currentContent="currentContent"
+      :currentTab="currentTab"
     ></StarHero>
     <div class="w-3/5 flex flex-col">
       <span class="mb-8 text-3xl">OUR FAITH</span>
@@ -179,7 +179,7 @@
         },
       ]);
 
-      const currentContent = ref(StarContent.INTRO);
+      const currentTab = ref(StarContent.INTRO);
       const heroContentType = ref(HeroContentType.STAR);
 
       const infoItems = reactive({
@@ -248,7 +248,7 @@
       ]);
 
       return {
-        currentContent,
+        currentTab,
         heroContentType,
         contentItems,
         infoItems,

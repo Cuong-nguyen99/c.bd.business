@@ -2,10 +2,13 @@
   <div v-if="starContentItems" class="mb-20 flex flex-col gap-y-12">
     <div class="px-[20%] flex justify-between items-center">
       <span class="text-5xl">{{ starContentItems.title }}</span>
-      <span>홈 > 스타드라이버 > {{ starContentItems.title }}</span>
+      <span>홈 > {{ headerTabs }} > {{ starContentItems.title }}</span>
     </div>
     <img :src="starContentItems.img" alt="" />
-    <div class="mt-4 px-[20%] flex flex-col gap-y-10">
+    <div
+      v-if="starContentItems.subtitle"
+      class="mt-4 px-[20%] flex flex-col gap-y-10"
+    >
       <div class="flex gap-x-8">
         <div class="basis-1/4 pb-14 border-b-2 border-primary">
           <span class="text-primary text-4xl uppercase">{{
@@ -55,10 +58,10 @@
   import { defineComponent, ref, reactive, computed, toRefs } from "vue";
 
   export default defineComponent({
-    props: ["heroContentType", "currentContent"],
+    props: ["heroContentType", "currentTab"],
 
     setup(props) {
-      const { currentContent, heroContentType } = toRefs(props);
+      const { currentTab, heroContentType } = toRefs(props);
 
       const heroContentItems = ref({
         starDriver: {
@@ -149,43 +152,167 @@
             },
           },
         },
-        driverService: null,
-        carSevice: null,
+        driverService: {
+          Service: {
+            img: computed(() => {
+              return new URL(
+                "../../assets/driver/driver-top-banner-1.jpg",
+                import.meta.url
+              ).href;
+            }),
+            title: "법인",
+            subtitle: "Premium",
+            desc: {
+              descTitle: [
+                "VIP 를 위한 프리미엄 서비스.",
+                "“존엄한 당신을 더욱 존엄하게”",
+              ],
+              descContent: null,
+            },
+            subDesc: {
+              subDescTitle: null,
+              subDescContent: null,
+            },
+          },
+          Charge: {
+            img: computed(() => {
+              return new URL(
+                "../../assets/driver/driver-top-banner-2.jpg",
+                import.meta.url
+              ).href;
+            }),
+            title: "요금안내",
+            subtitle: "Charge",
+            desc: {
+              descTitle: ["합리적인 서비스 요금으로 모시겠습니다."],
+              descContent: null,
+            },
+            subDesc: {
+              subDescTitle: null,
+              subDescContent: null,
+            },
+          },
+        },
+        carSevice: {
+          Service: {
+            img: computed(() => {
+              return new URL(
+                "../../assets/car/car-top-banner-1.jpg",
+                import.meta.url
+              ).href;
+            }),
+            title: "탁송",
+            subtitle: "Safe & Fast",
+            desc: {
+              descTitle: ["프리미엄 탁송 서비스 “신속하고 안전하게”"],
+              descContent: null,
+            },
+            subDesc: {
+              subDescTitle: null,
+              subDescContent: null,
+            },
+          },
+          Charge: {
+            img: computed(() => {
+              return new URL(
+                "../../assets/car/car-top-banner-2.jpg",
+                import.meta.url
+              ).href;
+            }),
+            title: "요금안내",
+            subtitle: "Charge",
+            desc: {
+              descTitle: ["합리적인 서비스 요금으로 모시겠습니다."],
+              descContent: null,
+            },
+            subDesc: {
+              subDescTitle: null,
+              subDescContent: null,
+            },
+          },
+          Delivery: {
+            img: computed(() => {
+              return new URL(
+                "../../assets/car/car-top-banner-3.jpg",
+                import.meta.url
+              ).href;
+            }),
+            title: "제주탁송",
+            subtitle: null,
+            desc: {
+              descTitle: null,
+              descContent: null,
+            },
+            subDesc: {
+              subDescTitle: null,
+              subDescContent: null,
+            },
+          },
+        },
         premiumMember: null,
         helpCenter: null,
       });
 
       const contentObj = computed(() => {
+        // Star driver content
         if (heroContentType.value === HeroContentType.STAR) {
-          if (currentContent.value === StarContent.INTRO) {
+          if (currentTab.value === StarContent.INTRO) {
             return heroContentItems.value.starDriver.Intro;
-          }
-          if (currentContent.value === StarContent.PARTER) {
+          } else if (currentTab.value === StarContent.PARTER) {
             return heroContentItems.value.starDriver.Parter;
           } else {
             return heroContentItems.value.starDriver.Platform;
           }
         }
+        // Policy content
         if (heroContentType.value === HeroContentType.POLICY)
           return heroContentItems.value.policyAgreement.Compensate;
-
-        if (heroContentType.value === HeroContentType.DRIVER)
-          return heroContentItems.value.driverService;
-
-        if (heroContentType.value === HeroContentType.CAR)
-          return heroContentItems.value.carSevice;
-
+        // Driver service content
+        if (heroContentType.value === HeroContentType.DRIVER) {
+          if (currentTab.value === StarContent.SERVICE) {
+            return heroContentItems.value.driverService.Service;
+          } else {
+            return heroContentItems.value.driverService.Charge;
+          }
+        }
+        // Car service content
+        if (heroContentType.value === HeroContentType.CAR) {
+          if (currentTab.value === StarContent.SERVICE) {
+            return heroContentItems.value.carSevice.Service;
+          } else if (currentTab.value === StarContent.PRICE) {
+            return heroContentItems.value.carSevice.Charge;
+          } else {
+            return heroContentItems.value.carSevice.Delivery;
+          }
+        }
+        // VIP member content
         if (heroContentType.value === HeroContentType.PREMIUM)
           return heroContentItems.value.premiumMember;
         else;
         return heroContentItems.value.helpCenter;
       });
 
-      console.log(contentObj.value);
+      const headerTabs = computed(() => {
+        switch (heroContentType.value) {
+          case HeroContentType.STAR:
+            return "스타드라이버";
+          case HeroContentType.POLICY:
+            return "책임 및 보상";
+          case HeroContentType.DRIVER:
+            return "운전대행 서비스";
+          case HeroContentType.CAR:
+            return "카 딜리버리 서비스";
+          case HeroContentType.PREMIUM:
+            return "VIP기업고객";
+          default:
+            return "고객센터";
+        }
+      });
 
       return {
         starContentItems: contentObj,
-        currentContent,
+        currentTab,
+        headerTabs,
       };
     },
   });
